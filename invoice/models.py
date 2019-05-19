@@ -2,7 +2,10 @@ from django.db import models
 
 
 # TODO implementar clase de auditoria
-class Product(models.Model):
+from utils.django.db.models import Auditor
+
+
+class Product(Auditor):
   """
   table for product.
   """
@@ -18,7 +21,7 @@ class Product(models.Model):
     return "%s %s %s" % (self.name, self.price, self.product_description)
 
 
-class Customer(models.Model):
+class Customer(Auditor):
   """
   table for customer.
   """
@@ -30,7 +33,7 @@ class Customer(models.Model):
     return "%s - %s" % (self.name, self.email)
 
 
-class AvailableProduct(models.Model):
+class AvailableProduct(Auditor):
   """
   table for available product.
   """
@@ -42,7 +45,7 @@ class AvailableProduct(models.Model):
     return "%s %s" % (self.customer, self.product)
 
 
-class Order(models.Model):
+class Order(Auditor):
   """
   table for order.
   """
@@ -57,7 +60,7 @@ class Order(models.Model):
     return "%s %s %s" % (self.customer, self.delivery_address, self.date)
 
 
-class OrderDetail(models.Model):
+class OrderDetail(Auditor):
   """
   table for order detail.
   """
