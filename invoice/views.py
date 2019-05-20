@@ -18,7 +18,11 @@ class OrderList(generics.ListCreateAPIView):
   serializer_class = OrderSerializer
   filter_fields = {'customer': ['exact'], 'date': ['range', 'exact']}
   authentication_classes = (TokenAuthentication,)
-  def post(self, request, format=None):
+
+  def get_queryset(self):
+    return Order.objects.all()
+
+  def post(self, request, format=None, **kwargs):
     user = request.user
     data = request.data
     data['created_by'] = user
@@ -27,7 +31,7 @@ class OrderList(generics.ListCreateAPIView):
     products = [order['product_id'] for order in data['order_details']]
     if len(products) > 5:
       return Response('cant process orders with more than 5 products', status=status.HTTP_403_FORBIDDEN)
-    if not AvailableProduct.objects.filter(customer=customer, product_id__in=products).count() < len(products):
+    if AvailableProduct.objects.filter(customer=customer, product_id__in=products).count() < len(products):
       return Response('some products are restricted for this client', status=status.HTTP_403_FORBIDDEN)
     OrderSerializer().create(data)
     return Response(status=status.HTTP_201_CREATED)

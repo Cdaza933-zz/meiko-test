@@ -57,4 +57,4 @@ class ObtainAuthToken(JSONWebTokenAPIView):
       return response
 
     return Response(serializer.errors,
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                    status=status.HTTP_422_UNPROCESSABLE_ENTITY)

@@ -23,7 +23,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
     # TODO completar el metodo para obtener los productos
     def get_products(self, order):
-        return order.orderdetail_set.all().values_list('product__name', flat=True)
+        orders = order.orderdetail_set.all().values_list('product__name', 'quantity')
+        products = ''
+        for product, name in orders:
+            products += '{} x {},'.format(product, name)
+        return products[:-2]
 
     # TODO completar el metodo para crear una orden
     def create(self, validated_data):
